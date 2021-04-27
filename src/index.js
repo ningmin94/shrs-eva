@@ -34,7 +34,7 @@ const gameObject = new GameObject('gameObj1', {
 
 gameObject.addComponent(
     new Img({
-        resource: 'image1'
+        resource: 'sense_four_bg'
     })
 )
 
