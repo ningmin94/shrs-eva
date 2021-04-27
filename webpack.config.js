@@ -3,7 +3,8 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
     entry: {
-        index: './src/index.js',
+        loading: './src/scene/loading/index.js',
+        index: './src/index.js'
     },
     plugins: [
         new HtmlWebpackPlugin({
