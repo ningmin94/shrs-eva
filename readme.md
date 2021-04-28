@@ -1,3 +1,5 @@
-最基础的一套webpack配置
+## 一个evajs的小动画
 
-* 支持热部署
+* npm install
+* npm start
+* npm run build

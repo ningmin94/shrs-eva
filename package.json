@@ -11,6 +11,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@eva/plugin-stats": "^1.0.4",
     "css-loader": "^5.2.4",
     "file-loader": "^6.2.0",
     "html-loader": "^2.1.2",
@@ -28,6 +29,7 @@
     "@eva/plugin-renderer-event": "^1.0.4",
     "@eva/plugin-renderer-graphics": "^1.0.4",
     "@eva/plugin-renderer-img": "^1.0.4",
+    "@eva/plugin-renderer-mask": "^1.0.4",
     "@eva/plugin-renderer-render": "^1.0.4",
     "@eva/plugin-renderer-sprite-animation": "^1.0.4",
     "@eva/plugin-renderer-text": "^1.0.4",

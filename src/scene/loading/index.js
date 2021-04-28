@@ -2,8 +2,12 @@ import { Game, Scene, GameObject, resource } from '@eva/eva.js';
 import { Img, ImgSystem } from '@eva/plugin-renderer-img';
 import { RendererSystem } from '@eva/plugin-renderer';
 import { RenderSystem } from '@eva/plugin-renderer-render';
-import { Graphics, GraphicsSystem } from '@eva/plugin-renderer-graphics';
+import { GraphicsSystem } from '@eva/plugin-renderer-graphics';
 import { Transition, TransitionSystem } from '@eva/plugin-transition';
+import { Mask, MaskSystem, MASK_TYPE } from '@eva/plugin-renderer-mask';
+import { StatsSystem } from '@eva/plugin-stats';
+
+
 import resources from './resources';
 
 resource.addResource(resources);
@@ -25,9 +29,20 @@ const game = new Game({
         new ImgSystem(),
         new RenderSystem(),
         new GraphicsSystem(),
-        new TransitionSystem()
+        new TransitionSystem(),
+        new MaskSystem()
     ]
 });
+
+game.addSystem(new StatsSystem({
+    show: true,
+    style: {
+      x: 0,
+      y: 0,
+      width: 20,
+      height: 12
+    }
+  }))
 
 game.scene.transform.size.width = 750;
 game.scene.transform.size.height = 1448;
@@ -38,35 +53,77 @@ scene.transform.size.height = 1448;
 
 const go_one_bg = initBackground();
 const go_one_funnel = initFunnel();
-const go_one_progress = initProgress();
+const goes = initProgress();
 
 scene.addChild(go_one_bg);
+goes.forEach(go => { scene.addChild(go) });
 scene.addChild(go_one_funnel);
 
 game.scene.addChild(scene);
 
 //创建进度条
 function initProgress() {
-    const go_one_progress = new GameObject('go_one_progress', {
+    const go = new GameObject('sense_one_line_bg', {
         size: {
-            width: 600,
-            height: 100
+            width: 526,
+            height: 72
         },
         position: {
-            x: 560,
-            y: 600
+            x: 100,
+            y: 590
         }
     });
 
-    let graphics = go_one_progress.addComponent(new Graphics());
-    graphics.beginFill();
+    go.addComponent(
+        new Img({
+            resource: 'sense_one_line_bg'
+        })
+    );
 
-    return go_one_progress;
+    const go2 = new GameObject('sense_one_line', {
+        size: {
+            width: 498,
+            height: 48
+        },
+        position: {
+            x: 115,
+            y: 602
+        }
+    });
+
+    go2.addComponent(
+        new Img({
+            resource: 'sense_one_line'
+        })
+    );
+
+    const mask = go2.addComponent(
+        new Mask({
+            type: MASK_TYPE.RoundedRect,
+            style: {
+                width: 100,
+                height: 100,
+                x: 0,
+                y: 0,
+                radius: 100
+            }
+        })
+    );
+
+    setInterval(() => {
+        if (mask.style.width > 800) {
+            return;
+        }
+        mask.style.width += 10;
+    }, 100);
+
+
+    return [go, go2];
 }
 
 //创建沙漏
 function initFunnel() {
-    const go_one_funnel = new GameObject('go_one_funnel', {
+    const go = new GameObject('go_one_funnel', {
         size: {
             width: 91,
             height: 130
@@ -76,25 +133,25 @@ function initFunnel() {
             y: .5
         },
         position: {
-            x: 560,
-            y: 600
+            x: 590,
+            y: 623
         },
         rotation: 0
     });
 
-    go_one_funnel.addComponent(
+    go.addComponent(
         new Img({
             resource: 'sense_one_shalou'
         })
     );
 
     //添加旋转
-    let transition = go_one_funnel.addComponent(new Transition({
+    let transition = go.addComponent(new Transition({
         group: {
             rotation: [
                 {
                     name: 'rotation',
-                    component: go_one_funnel.transform,
+                    component: go.transform,
                     values: [
                         {
                             time: 0,
@@ -115,23 +172,23 @@ function initFunnel() {
     transition.on('finish', animationName => {
         console.log('FINSIH')
     })
-    return go_one_funnel;
+    return go;
 }
 
 //创建背景
 function initBackground() {
-    const go_one_bg = new GameObject('go_one_bg', {
+    const go = new GameObject('go_one_bg', {
         size: {
             width: 750,
             height: 1448
         }
     });
 
-    go_one_bg.addComponent(
+    go.addComponent(
         new Img({
             resource: 'sense_one_bg'
         })
     );
 
-    return go_one_bg;
+    return go;
 }
